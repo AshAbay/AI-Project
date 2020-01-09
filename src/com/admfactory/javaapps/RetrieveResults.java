@@ -8,20 +8,22 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-public class InternetReader {
+public class RetrieveResults {
 
-    private String url;
+    private String queryUrl;
     private Document html;
+    private ArrayList <String> urls;
 
-    public InternetReader () throws IOException {
+    public RetrieveResults(String rawQuery) throws IOException {
 
         //https://www.google.com/search?q=donald+trump
         //String prepend = "https://www.google.com/search?q=";
         //url = String.join("+",url.split(" +");
-        this.url = "https://www.google.com/search?q=donald+trump";
+        String query = rawQuery.replace(" ", "+");
+        this.queryUrl = "https://www.google.com/search?q="+query;
+        this.urls = new ArrayList<>();
 
-
-        html = Jsoup.connect(this.url).get();
+        html = Jsoup.connect(this.queryUrl).get();
 
         //System.out.println(html);
     }
@@ -47,8 +49,8 @@ public class InternetReader {
                 Elements websiteLines = r.select("a:has(div.ellip)");
                 for (Element websiteLine : websiteLines) {
                     String url = websiteLine.attr("href");
-                    /*System.out.println(url);
-                    System.out.println("NEXT!");*/
+                    System.out.println(url);
+                    System.out.println("NEXT!");
                     websites.add(url);
                 }
             }
@@ -56,11 +58,34 @@ public class InternetReader {
         return 0;
 
     }
-    public static void main (String[] args) throws IOException {
-        InternetReader test = new InternetReader();
-        ArrayList<String> urls = new ArrayList<>();
-        test.getResults(urls);
 
+    public ArrayList<String> getUrls() {
+        return urls;
     }
+
+    public Document getHtml() {
+        return html;
+    }
+
+    public void setQueryUrl(String queryUrl) {
+        this.queryUrl = queryUrl;
+    }
+
+    public void setHtml(Document html) {
+        this.html = html;
+    }
+
+    public String getQueryUrl() {
+        return queryUrl;
+    }
+
+    public void setUrls(ArrayList<String> urls) {
+        this.urls = urls;
+    }
+    /*public static void main (String[] args) throws IOException {
+        RetrieveResults test = new RetrieveResults("donald trump");
+        test.getResults(test.urls);
+
+    }*/
 
 }

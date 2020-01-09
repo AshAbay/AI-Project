@@ -1,3 +1,4 @@
-public class TFIDF {
+public class
+TFIDF {
 
 }
