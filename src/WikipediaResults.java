@@ -2,6 +2,7 @@ import com.admfactory.javaapps.RetrieveResults;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class WikipediaResults{
 
@@ -17,15 +18,23 @@ public class WikipediaResults{
         wikiResults = new RetrieveResults(wikiQuery);
     }
 
-    public void setWikiUrls () throws IOException {
+    public int setWikiUrls () throws IOException {
         int urlResults = wikiResults.getResults(wikiUrls);
-        if (urlResults != 0){
+        if (urlResults != 0 || wikiUrls.isEmpty()){
             System.out.println("SOMETHING IS WRONG");
-            return;
+            return -1;
         }
-        return;
+        Iterator<String> iterator = wikiUrls.iterator();
+        while (iterator.hasNext()){
+            if (!iterator.next().contains("en.wikipedia.org")){
+                iterator.remove();
+            }
+        }
+        if (wikiUrls.isEmpty()){
+            return -1;
+        }
+        return 0;
     }
-
     public ArrayList<String> getWikiUrls() {
         return wikiUrls;
     }
@@ -39,7 +48,7 @@ public class WikipediaResults{
     }
 
     public static void main (String[] args) throws IOException {
-        WikipediaResults test = new WikipediaResults("donald trump");
+        WikipediaResults test = new WikipediaResults("bushfires");
         test.setWikiUrls();
         test.getWikiUrls();
         for (String url : test.wikiUrls){

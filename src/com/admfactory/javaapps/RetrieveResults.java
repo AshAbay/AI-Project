@@ -127,7 +127,7 @@ public class RetrieveResults {
         this.urls = urls;
     }
     public static void main (String[] args) throws IOException {
-        RetrieveResults test = new RetrieveResults("donald trump");
+        RetrieveResults test = new RetrieveResults("bushfires");
         test.getResults(test.urls);
         for (String url : test.urls){
             System.out.println(url);
