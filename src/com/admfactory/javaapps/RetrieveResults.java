@@ -2,6 +2,8 @@ package com.admfactory.javaapps;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -31,19 +33,60 @@ public class RetrieveResults {
     public int getResults (ArrayList <String> websites) throws IOException {
 
         Element main = html.getElementById("main");
-        Element search = main.getElementById("search");
-        Elements webList = search.select("div.bkWMgd");
+        Element cnt = main.getElementById("cnt");
+        //System.out.println(cnt);
+        Elements mw = cnt.getElementsByClass("mw");
+        Element rcnt = mw.get(1);
+        Element search = rcnt.getElementById("search");
+        Elements bkWMgds = search.getElementsByClass("bkWMgd");
+        for (Element bkWMgd : bkWMgds){
+            /*System.out.println(bkWMgd);
+            System.out.println("\n\n\nNEXT!!!\n\n\n");*/
+            //String bkWMgdText = bkWMgd.text();
+            Elements links = bkWMgd.select("a");
+            for (Element link:links){
+                    String linkText = link.attr("href");
+                    if (linkText.matches("https://(.+)")) {
+                        if (!linkText.matches("(.+)webcache(.+)google(.+)")) {
+                            if (!websites.contains(linkText)){
+                                websites.add(linkText);
+                            }
+                            /*System.out.println(linkText);
+                            System.out.println("\n\n\nNEXT!!!\n\n\n");*/
+                        }
+                    }
+            }
+        }
+        String html = this.html.html();
+        Pattern pattern = Pattern.compile("href\\\\x3d\\\\x22https://(.+?)\\\\x22");
+        Matcher matcher = pattern.matcher(html);
+            /*if (matcher.find()){
+                System.out.println(matcher.group());
+                System.out.println("\n\n\nNEXT!!!\n\n\n");
+            }*/
+        while (matcher.find()) {
+            //System.out.println("Full match: " + matcher.group(0));
+            //System.out.println("\n\n\nNEXT!!!\n\n\n");
+            for (int i = 1; i <= matcher.groupCount(); i++) {
+                if (!websites.contains("https://"+matcher.group(i))) {
+                    websites.add("https://"+matcher.group(i));
+                }
+                //System.out.println("Group " + i + ": " + matcher.group(i));
+                //System.out.println("\n\n\nNEXT!!!!!!!!!\n\n\n");
+            }
+        }
+        /*Elements webList = search.select("div.bkWMgd");
         Elements web = webList.select("div:contains(Web results)");
         for (Element singleWeb : web){
-            /*System.out.println(singleWeb);
-            System.out.println("Next Single Web");*/
+            System.out.println(singleWeb);
+            System.out.println("Next Single Web");
         }
         if (web.size() == 0) {
             System.out.println(web.size());
             System.out.println("SOMETHING IS WRONG");
             return -1;
-        }
-        for (Element webResults : web) {
+        }*/
+        /*for (Element webResults : web) {
             Elements rs = webResults.select("div.r");
             for (Element r : rs) {
                 Elements websiteLines = r.select("a:has(div.ellip)");
@@ -54,7 +97,8 @@ public class RetrieveResults {
                     websites.add(url);
                 }
             }
-        }
+        }*/
+
         return 0;
 
     }
@@ -82,10 +126,13 @@ public class RetrieveResults {
     public void setUrls(ArrayList<String> urls) {
         this.urls = urls;
     }
-    /*public static void main (String[] args) throws IOException {
+    public static void main (String[] args) throws IOException {
         RetrieveResults test = new RetrieveResults("donald trump");
         test.getResults(test.urls);
+        for (String url : test.urls){
+            System.out.println(url);
+        }
 
-    }*/
+    }
 
 }

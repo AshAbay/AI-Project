@@ -42,5 +42,8 @@ public class WikipediaResults{
         WikipediaResults test = new WikipediaResults("donald trump");
         test.setWikiUrls();
         test.getWikiUrls();
+        for (String url : test.wikiUrls){
+            System.out.println(url);
+        }
     }
 }
