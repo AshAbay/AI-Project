@@ -89,3 +89,5 @@ import org.jsoup.select.Elements;
 
     }
 
+//why wont reformatcontent open?
+// why what?

@@ -1,14 +1,15 @@
 package com.admfactory.javaapps;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class RetrieveResults {
 
@@ -30,7 +31,7 @@ public class RetrieveResults {
         //System.out.println(html);
     }
 
-    public int getResults (ArrayList <String> websites) throws IOException {
+    public int getResults () throws IOException {
 
         Element main = html.getElementById("main");
         Element cnt = main.getElementById("cnt");
@@ -48,8 +49,8 @@ public class RetrieveResults {
                     String linkText = link.attr("href");
                     if (linkText.matches("https://(.+)")) {
                         if (!linkText.matches("(.+)webcache(.+)google(.+)")) {
-                            if (!websites.contains(linkText)){
-                                websites.add(linkText);
+                            if (!urls.contains(linkText)){
+                                urls.add(linkText);
                             }
                             /*System.out.println(linkText);
                             System.out.println("\n\n\nNEXT!!!\n\n\n");*/
@@ -68,8 +69,8 @@ public class RetrieveResults {
             //System.out.println("Full match: " + matcher.group(0));
             //System.out.println("\n\n\nNEXT!!!\n\n\n");
             for (int i = 1; i <= matcher.groupCount(); i++) {
-                if (!websites.contains("https://"+matcher.group(i))) {
-                    websites.add("https://"+matcher.group(i));
+                if (!urls.contains("https://"+matcher.group(i))) {
+                    urls.add("https://"+matcher.group(i));
                 }
                 //System.out.println("Group " + i + ": " + matcher.group(i));
                 //System.out.println("\n\n\nNEXT!!!!!!!!!\n\n\n");
@@ -126,9 +127,10 @@ public class RetrieveResults {
     public void setUrls(ArrayList<String> urls) {
         this.urls = urls;
     }
+
     public static void main (String[] args) throws IOException {
-        RetrieveResults test = new RetrieveResults("bushfires");
-        test.getResults(test.urls);
+        RetrieveResults test = new RetrieveResults("according to wikipedia, who is bill gates");
+        test.getResults();
         for (String url : test.urls){
             System.out.println(url);
         }

@@ -13,20 +13,22 @@ public class WikipediaResults{
 
     public WikipediaResults (String wikiRawQuery) throws IOException {
         this.wikiRawQuery = wikiRawQuery;
-        this.wikiQuery = wikiRawQuery + " site:en.wikipedia.org";
+        this.wikiQuery = "according to wikipedia, " + wikiRawQuery;
         this.wikiUrls = new ArrayList<>();
         wikiResults = new RetrieveResults(wikiQuery);
+        setWikiUrls();
     }
 
     public int setWikiUrls () throws IOException {
-        int urlResults = wikiResults.getResults(wikiUrls);
-        if (urlResults != 0 || wikiUrls.isEmpty()){
+        int urlResults = wikiResults.getResults();
+        if (urlResults != 0 || wikiResults.getUrls().isEmpty()){
             System.out.println("SOMETHING IS WRONG");
             return -1;
         }
+        wikiUrls = wikiResults.getUrls();
         Iterator<String> iterator = wikiUrls.iterator();
         while (iterator.hasNext()){
-            if (!iterator.next().contains("en.wikipedia.org")){
+            if (!iterator.next().contains("wikipedia.org")){
                 iterator.remove();
             }
         }
@@ -35,6 +37,7 @@ public class WikipediaResults{
         }
         return 0;
     }
+
     public ArrayList<String> getWikiUrls() {
         return wikiUrls;
     }
@@ -48,8 +51,8 @@ public class WikipediaResults{
     }
 
     public static void main (String[] args) throws IOException {
-        WikipediaResults test = new WikipediaResults("bushfires");
-        test.setWikiUrls();
+        WikipediaResults test = new WikipediaResults("who is bill gates");
+//        test.setWikiUrls();
         test.getWikiUrls();
         for (String url : test.wikiUrls){
             System.out.println(url);
