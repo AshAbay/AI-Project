@@ -29,7 +29,7 @@ public class FindRightAnswer {
         assistantTranscription = lowerAssistant;
         GetWatsonTranscription watson = new GetWatsonTranscription();
         watson.getTranscription();
-        BufferedReader br2 = new BufferedReader(new FileReader("/home/arsha/IdeaProjects/AI-Project/assistantPipe"));
+        BufferedReader br2 = new BufferedReader(new FileReader("/home/arsha/IdeaProjects/AI-Project/watsonPipe"));
         while ((line = br2.readLine()) != null) {
             watsonTranscription+= line;
         }
