@@ -33,6 +33,7 @@ public class DecisionMaker {
         ArrayList<String> matches = new ArrayList<>();
         ArrayList<String> longestSubstring = new ArrayList<>();
         for (int i = 0; i < wikiUrls.size();i++){
+            System.out.println(wikiUrls.get(i));
             ScrapeWikipedia scrapeWikipediaContents = new ScrapeWikipedia(wikiUrls.get(i));
             //System.out.println(reformatContent.reformatContent(scrapeWikipediaContents.scrapeContent()));
             //System.out.println("\n\n\n");
@@ -48,10 +49,12 @@ public class DecisionMaker {
         String rightUrl = null;
         for (int j = 0; j < longestSubstring.size(); j++){
             int length = wordcount(longestSubstring.get(j));
+            System.out.println(length);
             if (max <= length){
-                max = longestSubstring.get(j).length();
-                System.out.println("Right url: " + rightUrl);
+                max = length;
                 rightUrl = matches.get(j);
+                System.out.println("Right url: " + rightUrl);
+
             }
         }
         return rightUrl;
@@ -100,6 +103,10 @@ public class DecisionMaker {
         }
         System.out.println(resultStr);
         return resultStr;
+    }
+
+    public void setSearchString(String searchString) {
+        this.searchString = searchString;
     }
 
     public String findRightUrl () throws IOException, ParseException {

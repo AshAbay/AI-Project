@@ -12,17 +12,17 @@ public class GetWatsonTranscription {
         Process process = Runtime.getRuntime().exec(executable, envp);
         String line;
         System.out.println("Output:");
-        BufferedReader br = new BufferedReader(new InputStreamReader(process.getInputStream()));
-        while ((line = br.readLine()) != null) {
-            System.out.print("Output is ");
-            System.out.println(line);
-        }
-        System.out.println("Errors:");
-        br = new BufferedReader(new InputStreamReader(process.getErrorStream()));
-        while ((line = br.readLine()) != null) {
-            System.out.print("Output is ");
-            System.out.println(line);
-        }
+//        BufferedReader br = new BufferedReader(new InputStreamReader(process.getInputStream()));
+//        while ((line = br.readLine()) != null) {
+//            System.out.print("Output is ");
+//            System.out.println(line);
+//        }
+//        System.out.println("Errors:");
+//        br = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+//        while ((line = br.readLine()) != null) {
+//            System.out.print("Error is ");
+//            System.out.println(line);
+//        }
     }
     public static void main (String[] args) throws IOException {
         GetWatsonTranscription transcription = new GetWatsonTranscription();

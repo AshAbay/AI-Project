@@ -19,27 +19,42 @@ public class FindRightAnswer {
         watsonTranscription = "";
         rightUrl = "";
         GetAssistantTranscription assistant = new GetAssistantTranscription();
+        System.out.println("Getting translation from assistant");
         assistant.getTranscription(searchQuery);
+        System.out.println("done");
         String line;
         BufferedReader br1 = new BufferedReader(new FileReader("/home/arsha/IdeaProjects/AI-Project/assistantPipe"));
+        System.out.println("Reading assistant Pipe");
         while ((line = br1.readLine()) != null) {
-            assistantTranscription+= line;
+            assistantTranscription += line;
         }
-        String lowerAssistant = assistantTranscription.toLowerCase();
-        assistantTranscription = lowerAssistant;
+        System.out.println("Done ");
+        assistantTranscription = assistantTranscription.toLowerCase();
+        System.out.println(assistantTranscription);
+        System.out.println("Getting translation from Watson");
         GetWatsonTranscription watson = new GetWatsonTranscription();
+        System.out.println("done");
         watson.getTranscription();
+        System.out.println("Reading watson Pipe");
         BufferedReader br2 = new BufferedReader(new FileReader("/home/arsha/IdeaProjects/AI-Project/watsonPipe"));
         while ((line = br2.readLine()) != null) {
-            watsonTranscription+= line;
+            watsonTranscription += line;
         }
-        String lowerWatson = watsonTranscription.toLowerCase();
-        watsonTranscription = lowerWatson;
+        System.out.println("done");
+        watsonTranscription = watsonTranscription.toLowerCase();
+        System.out.println(watsonTranscription);
     }
 
     public void getRightAnswer () throws IOException, ParseException {
-        DecisionMaker decisionMaker = new DecisionMaker(this.wikiUrls, this.searchQuery);
+        DecisionMaker decisionMaker = new DecisionMaker(this.wikiUrls, this.watsonTranscription);
         rightUrl = decisionMaker.findRightUrl();
         System.out.println(rightUrl);
+        decisionMaker.setSearchString(this.assistantTranscription);
+        rightUrl = decisionMaker.findRightUrl();
+        System.out.println(rightUrl);
+    }
+    public static void main (String[] args) throws IOException, ParseException {
+        FindRightAnswer findRightAnswer = new FindRightAnswer("According to wikipedia, who is bill gates?");
+        findRightAnswer.getRightAnswer();
     }
 }
