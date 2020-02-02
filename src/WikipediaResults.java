@@ -27,10 +27,15 @@ public class WikipediaResults{
         }
         wikiUrls = wikiResults.getUrls();
         Iterator<String> iterator = wikiUrls.iterator();
-        while (iterator.hasNext()){
-            if (!iterator.next().contains("wikipedia.org")){
+
+        while (iterator.hasNext()) {
+            String s = iterator.next();
+            if (!s.contains("wikipedia.org") || s.contains("#")) {
                 iterator.remove();
             }
+        }
+        if (!wikiUrls.get(wikiUrls.size()-1).contains("wikipedia.org") || wikiUrls.get(wikiUrls.size()-1).contains("#")){
+            wikiUrls.remove(wikiUrls.size()-1);
         }
         if (wikiUrls.isEmpty()){
             return -1;
@@ -51,7 +56,7 @@ public class WikipediaResults{
     }
 
     public static void main (String[] args) throws IOException {
-        WikipediaResults test = new WikipediaResults("who is bill gates");
+        WikipediaResults test = new WikipediaResults("what is stupidity");
 //        test.setWikiUrls();
         test.getWikiUrls();
         for (String url : test.wikiUrls){
