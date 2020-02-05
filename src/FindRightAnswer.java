@@ -34,8 +34,7 @@ public class FindRightAnswer {
         String assistantAndWatsonDifferent = "Assistant transcription is bringing up a different url to watson's transcription\n";
         String assistantWatsonCacheNotInclusive = "Assistant Cache and Watson Cache do not have inclusive urls, and assistant transcription and watson transcription no result";
         if (assistantTranscription == null || assistantTranscription.equals("") ) {
-            String error = "Something is wrong, got no Assistant Transcription";
-            return error;
+            return "Something is wrong, got no Assistant Transcription";
         }
         if (assistantCache.getURL(assistantTranscription) != null && assistantCache.getURL(assistantTranscription).size() == 1) {
             return assistantCache.getURL(assistantTranscription).get(0);
@@ -74,7 +73,7 @@ public class FindRightAnswer {
                     return assistantURL;
                 }
                 String watsonURL = watsonAnswer.getRightAnswer();
-                if (!watsonAnswer.equals("")){
+                if (!watsonURL.equals("")){
                     if (!watsonCache.getURL(watsonTranscription).contains(watsonURL)){
                         watsonCache.put(watsonTranscription, watsonURL);
                     }
