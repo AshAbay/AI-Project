@@ -1,16 +1,30 @@
-
-import java.io.IOException;
+import java.io.*;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class FindRightAnswer {
-    private AssistantCache assistantCache;
-    private WatsonCache watsonCache;
+    public static AssistantCache assistantCache;
+
+    static {
+        assistantCache = new AssistantCache();
+    }
+
+    public static WatsonCache watsonCache;
+
+    static {
+        try {
+            watsonCache = new WatsonCache();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     public FindRightAnswer() {
-        this.assistantCache = new AssistantCache();
-        this.watsonCache = new WatsonCache();
+//        this.assistantCache = new AssistantCache();
+//        this.watsonCache = new WatsonCache();
     }
 
     public String findRightAnswer(String query) throws IOException, ParseException {
@@ -19,7 +33,7 @@ public class FindRightAnswer {
         String assistantTranscription = assistantAnswer.getAssistantTranscription();
         String assistantAndWatsonDifferent = "Assistant transcription is bringing up a different url to watson's transcription\n";
         String assistantWatsonCacheNotInclusive = "Assistant Cache and Watson Cache do not have inclusive urls, and assistant transcription and watson transcription no result";
-        if (assistantTranscription.equals("") || assistantTranscription == null) {
+        if (assistantTranscription == null || assistantTranscription.equals("") ) {
             String error = "Something is wrong, got no Assistant Transcription";
             return error;
         }
@@ -27,8 +41,10 @@ public class FindRightAnswer {
             return assistantCache.getURL(assistantTranscription).get(0);
         }
         if (assistantCache.getURL(assistantTranscription) == null) {
+            System.out.println("No assistant cache results");
+            watsonAnswer.setWatsonTranscription();
             String watsonTranscription = watsonAnswer.getWatsonTranscription();
-            if (watsonCache.getURL(watsonTranscription) == null && watsonCache.getURL(watsonTranscription).size() == 1){
+            if (watsonCache.getURL(watsonTranscription) != null && watsonCache.getURL(watsonTranscription).size() == 1){
                 assistantCache.put(assistantTranscription, watsonCache.getURL(watsonTranscription).get(0));
                 return watsonCache.getURL(watsonTranscription).get(0);
             }
@@ -70,6 +86,8 @@ public class FindRightAnswer {
         }
 
         if (assistantCache.getURL(assistantTranscription).size() > 1) {
+            System.out.println("Got more than one answer\n");
+            watsonAnswer.setWatsonTranscription();
             String watsonTranscription = watsonAnswer.getWatsonTranscription();
             if (watsonCache.getURL(watsonTranscription) != null && watsonCache.getURL(watsonTranscription).size() == 1) {
                 if (assistantCache.getURL(assistantTranscription).contains(watsonCache.getURL(watsonTranscription).get(0))) {
@@ -138,7 +156,11 @@ public class FindRightAnswer {
 
     public static void main (String [] args) throws IOException, ParseException {
         FindRightAnswer findRightAnswer = new FindRightAnswer();
-        System.out.println(findRightAnswer.findRightAnswer("According to Wikipedia, what is stupidity"));
+        assistantCache.retrieveHashmaps();
+        watsonCache.retrieveHashmaps();
+        System.out.println(findRightAnswer.findRightAnswer("According to Wikipedia, who is bill gates"));
+        watsonCache.saveHashmaps();
+        assistantCache.saveHashmaps();
 
     }
 }

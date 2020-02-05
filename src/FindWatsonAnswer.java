@@ -16,6 +16,22 @@ public class FindWatsonAnswer {
         wikiUrls = test.getWikiUrls();
         watsonTranscription = "";
         rightUrl = "";
+
+    }
+
+    public String getRightAnswer () throws IOException, ParseException {
+        setWatsonTranscription();
+        DecisionMaker decisionMaker = new DecisionMaker(this.wikiUrls, this.watsonTranscription);
+        rightUrl = decisionMaker.findRightUrl();
+        System.out.println(rightUrl);
+        return rightUrl;
+    }
+
+    public String getWatsonTranscription() {
+        return watsonTranscription;
+    }
+
+    public void setWatsonTranscription () throws IOException {
         String line;
         System.out.println("Getting translation from Watson");
         GetWatsonTranscription watson = new GetWatsonTranscription();
@@ -29,17 +45,6 @@ public class FindWatsonAnswer {
         System.out.println("done");
         watsonTranscription = watsonTranscription.toLowerCase();
         System.out.println(watsonTranscription);
-    }
-
-    public String getRightAnswer () throws IOException, ParseException {
-        DecisionMaker decisionMaker = new DecisionMaker(this.wikiUrls, this.watsonTranscription);
-        rightUrl = decisionMaker.findRightUrl();
-        System.out.println(rightUrl);
-        return rightUrl;
-    }
-
-    public String getWatsonTranscription() {
-        return watsonTranscription;
     }
 
     public static void main (String[] args) throws IOException, ParseException {
