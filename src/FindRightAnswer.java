@@ -157,7 +157,7 @@ public class FindRightAnswer {
         FindRightAnswer findRightAnswer = new FindRightAnswer();
         assistantCache.retrieveHashmaps();
         watsonCache.retrieveHashmaps();
-        System.out.println(findRightAnswer.findRightAnswer("According to Wikipedia, who is bill gates"));
+        System.out.println(findRightAnswer.findRightAnswer("What is the weather like?"));
         watsonCache.saveHashmaps();
         assistantCache.saveHashmaps();
 
