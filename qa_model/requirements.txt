@@ -1,0 +1,7 @@
+happytransformer
+PyAudio
+webrtcvad
+numpy
+librosa
+torch
+transformers
